@@ -1,0 +1,11 @@
+.button {
+    -fx-display: inline-block;
+    -fx-border-radius: 4px;
+    -fx-background-color: #FFA07A;
+    -fx-border: none;
+    -fx-color: #FFFFFF;
+    -fx-text-align: center;
+    -fx-transition: 0.5s;
+    -fx-cursor: pointer;
+    -fx-margin: 5px;
+}

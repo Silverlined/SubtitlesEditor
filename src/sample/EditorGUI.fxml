@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
@@ -55,12 +57,19 @@
                   </Group>
                   <TextField fx:id="milliSecondsField" layoutX="197.0" layoutY="47.0" prefHeight="39.0" prefWidth="57.0" />
                   <Label layoutX="258.0" layoutY="67.0" text="милисек." />
-                  <Button fx:id="timeIntervalButton" layoutX="229.0" layoutY="110.0" mnemonicParsing="false" onAction="#changeTimeIntervals" text="Приложи">
+                  <Button fx:id="timeIntervalButton" layoutX="229.0" layoutY="110.0" mnemonicParsing="false" onAction="#changeTimeIntervals" stylesheets="@buttonStyle.css" text="Приложи">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Button>
                   <CheckBox fx:id="removeTagsBox" layoutX="59.0" layoutY="110.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="43.0" prefWidth="131.0" text="Премахни таговете" />
+                  <MenuButton fx:id="encodingBtn" layoutX="259.0" layoutY="14.0" mnemonicParsing="false" text="Encoding">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#setTo1251" text="Windows-1251" />
+                      <MenuItem mnemonicParsing="false" onAction="#setTo1253" text="Windows-1253" />
+                        <MenuItem mnemonicParsing="false" onAction="#setTo1250" text="Windows-1250" />
+                    </items>
+                  </MenuButton>
                </children>
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

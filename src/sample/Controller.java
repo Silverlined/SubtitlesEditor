@@ -1,9 +1,9 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 
 
 public class Controller {
+    @FXML
+    MenuButton encodingBtn;
     @FXML
     TextArea textEditor;
     @FXML
@@ -34,6 +36,7 @@ public class Controller {
     Text nameOfLoadedFile;
 
     private File subtitlesFile;
+    private String encoding = "Windows-1251";
 
     public void loadFile() {
         FileChooser fileChooser = new FileChooser();
@@ -44,13 +47,14 @@ public class Controller {
             saveChangesButton.setDisable(false);
             openFileWithButton.setDisable(false);
             putSubtitlesInTheEditor();
+            encodingBtn.setText("Windows-1251");
         }
     }
 
     private void putSubtitlesInTheEditor() {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(subtitlesFile), "Windows-1251"));
+                    new FileInputStream(subtitlesFile), encoding));
             String line;
             StringBuilder stringBuilder = new StringBuilder(8192);
             while ((line = bufferedReader.readLine()) != null) {
@@ -104,11 +108,11 @@ public class Controller {
         try {
             File chosenLocation = new File(fileLocation.getText());
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(chosenLocation), "Windows-1251"));
+                    new FileOutputStream(chosenLocation), encoding));
             String subtitles = textEditor.getText();
             bufferedWriter.write(subtitles);
         } catch (UnsupportedEncodingException e) {
-            MessageBox.display("Your system does not support Windows-1251 encoding");
+            MessageBox.display("Your system does not support the specified encoding");
             e.printStackTrace();
         } catch (NullPointerException | FileNotFoundException e) {
             MessageBox.display("File Not Found");
@@ -141,7 +145,7 @@ public class Controller {
             BufferedReader bufferedReader = null;
             try {
                 bufferedReader = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(temporaryEditable), "Windows-1251"
+                        new FileInputStream(temporaryEditable), encoding
                 ));
                 int timeInterval = Integer.parseInt(milliSecondsField.getText());
                 String line;
@@ -195,7 +199,7 @@ public class Controller {
                 MessageBox.display("Change the milliseconds");
                 e.printStackTrace();
             } catch (UnsupportedEncodingException e) {
-                MessageBox.display("Your system does not support Windows-1251 encoding");
+                MessageBox.display("Your system does not support the specified encoding");
                 e.printStackTrace();
             } catch (NullPointerException | FileNotFoundException e) {
                 MessageBox.display("File Not Found");
@@ -239,7 +243,7 @@ public class Controller {
     private void createTemporarySubtitles(File temporaryEditable) {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(temporaryEditable), "Windows-1251"
+                    new FileOutputStream(temporaryEditable), encoding
             ));
             bufferedWriter.write(textEditor.getText());
             bufferedWriter.flush();
@@ -264,5 +268,54 @@ public class Controller {
 
     public void activateSlowDown() {
         speedUpButton.selectedProperty().setValue(false);
+    }
+
+    public void setTo1251() {
+        encoding = "Windows-1251";
+        reloadFile();
+        encodingBtn.setText("Windows-1251");
+    }
+
+    private void reloadFile() {
+        if (subtitlesFile != null) {
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(subtitlesFile), encoding
+                ));
+                String line;
+                StringBuilder stringBuilder = new StringBuilder(8192);
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+                textEditor.setText(stringBuilder.toString());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public void setTo1253() {
+        encoding = "Windows-1253";
+        reloadFile();
+        encodingBtn.setText("UTF-8");
+    }
+
+    public void setTo1250() {
+        encoding = "Windows-1250";
+        reloadFile();
+        encodingBtn.setText("Windows-1250");
     }
 }
